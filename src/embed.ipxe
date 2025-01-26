@@ -1,0 +1,5 @@
+#!ipxe
+dhcp
+set crosscert http://ca.ipxe.org/auto
+:start
+chain --timeout 3000 --autofree http://xrgzs.f.lmxiao.top:8081/config/ipxe/menu.ipxe || chain --timeout 3000 --autofree http://c.xrgzs.top/ipxe/menu.ipxe || chain --timeout 3000 --autofree http://alist.xrgzs.top/d/config/ipxe/menu.ipxe ||  chain --timeout 3000 --autofree http://dl.xrgzs.top/d/config/ipxe/menu.ipxe || goto start
