@@ -1,0 +1,25 @@
+#!ipxe
+set crosscert http://ca.ipxe.org/auto
+set failcount:int8 0
+set manual_ip_mode 0
+
+:start
+iseq ${manual_ip_mode} 0 && ifconf || goto handle_fail
+chain --timeout 3000 --autofree https://c.xrgzs.top/ipxe/menu.ipxe || chain --timeout 3000 --autofree https://alist.xrgzs.top/d/config/ipxe/menu.ipxe || chain --timeout 3000 --autofree https://dl.xrgzs.top/d/config/ipxe/menu.ipxe || goto handle_fail
+goto end
+
+:handle_fail
+inc failcount
+iseq ${failcount} 3 && goto manual_ip
+goto start
+
+:manual_ip
+echo Chain failed 3 times, please configure network settings manually
+prompt Press any key to configure network...
+config net0
+set failcount:int8 0
+set manual_ip_mode 1
+goto start
+
+:end
+shell

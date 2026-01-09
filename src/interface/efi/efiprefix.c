@@ -119,7 +119,7 @@ struct init_fn efi_init_application_fn __init_fn ( INIT_NORMAL ) = {
 static int efi_probe ( struct root_device *rootdev __unused ) {
 
 	/* Try loading autoexec script */
-	efi_autoexec_load();
+	// efi_autoexec_load();
 
 	/* Remove any vetoed drivers */
 	efi_veto();
