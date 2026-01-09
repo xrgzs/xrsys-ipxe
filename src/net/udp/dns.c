@@ -841,21 +841,21 @@ static int dns_xfer_deliver ( struct dns_request *dns,
 	 */
 	switch ( qtype ) {
 
-	case htons ( DNS_TYPE_AAAA ):
-		/* We asked for an AAAA record and got nothing; try
-		 * the A.
+	case htons ( DNS_TYPE_A ):
+		/* We asked for an A record and got nothing;
+		 * try the AAAA.
 		 */
-		DBGC ( dns, "DNS %p found no AAAA record; trying A\n", dns );
-		dns->question->qtype = htons ( DNS_TYPE_A );
+		DBGC ( dns, "DNS %p found no A record; trying AAAA\n", dns );
+		dns->question->qtype = htons ( DNS_TYPE_AAAA );
 		dns_send_packet ( dns );
 		rc = 0;
 		goto done;
 
-	case htons ( DNS_TYPE_A ):
-		/* We asked for an A record and got nothing;
+	case htons ( DNS_TYPE_AAAA ):
+		/* We asked for an AAAA record and got nothing;
 		 * try the CNAME.
 		 */
-		DBGC ( dns, "DNS %p found no A record; trying CNAME\n", dns );
+		DBGC ( dns, "DNS %p found no AAAA record; trying CNAME\n", dns );
 		dns->question->qtype = htons ( DNS_TYPE_CNAME );
 		dns_send_packet ( dns );
 		rc = 0;
@@ -1007,8 +1007,7 @@ static int dns_resolv ( struct interface *resolv,
 	memcpy ( dns->search.data, dns_search.data, search_len );
 
 	/* Determine initial query type */
-	dns->qtype = ( ( dns6.count != 0 ) ?
-		       htons ( DNS_TYPE_AAAA ) : htons ( DNS_TYPE_A ) );
+	dns->qtype = htons ( DNS_TYPE_A );
 
 	/* Construct query */
 	query = &dns->buf.query;
